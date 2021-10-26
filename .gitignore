@@ -1,6 +1,8 @@
 # models
 *.pt
 *.pth
+data
+*.gz
 
 # Data - ims, vids numpy and ldi
 *.npy
