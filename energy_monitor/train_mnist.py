@@ -1,3 +1,9 @@
+'''
+torch training example taken from pytorch website (link)
+'''
+# Author: Matt Clifford <matt.clifford@bristol.ac.uk>
+
+
 from __future__ import print_function
 import argparse
 import torch
