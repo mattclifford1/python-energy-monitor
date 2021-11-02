@@ -23,8 +23,6 @@ Use the install script to set up automatically:
 
 `$ pip install -e .`
 
-# Running examples code with pyJoules
+# External Dependancies
 
-Activate the conda env with `$ conda activate energy_monitor` and find where the bin is using `$ which python`. We need to run python as root eg. using:
-
-`$ sudo /home/matt/miniconda3/envs/interactiveai/bin/python examples/print-pyJoules.py`
+We use [IntelPowerGadget](https://www.intel.com/content/www/us/en/developer/articles/tool/power-gadget.html) to monitor energy usage on Windows/MacOS. 

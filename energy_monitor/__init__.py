@@ -1,1 +1,1 @@
-from .utils import monitor
+from .powergadget_wrapper import monitor
