@@ -3,8 +3,9 @@ test functions to analyse energy monitoring wrapper to intel power gadget
 '''
 # Author: Matt Clifford <matt.clifford@bristol.ac.uk>
 
-import pytest
+import os
 import platform
+import pytest
 import energy_monitor
 
 def test_standard_input():
@@ -32,3 +33,10 @@ def test_joules_value():
     energy_monitor.utils.dummy_compute(2)
     monitor.stop()
     assert type(monitor.joules) == float
+
+def test_csv_removed():
+    monitor = energy_monitor.monitor()
+    monitor.start()
+    energy_monitor.utils.dummy_compute(2)
+    monitor.stop()
+    assert os.path.exists(monitor.csv_file) == False
