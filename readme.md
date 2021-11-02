@@ -11,11 +11,15 @@ Use the install script to set up automatically:
 
 `$ conda create --name energy_monitor python=3.8`
 
-2. Install dependancies with pip:
+2. Activate venv:
+
+`$ conda activate energy_monitor`
+
+3. Install dependancies with pip:
 
 `$ pip install -r requirements.txt -f https://download.pytorch.org/whl/cpu/torch_stable.html`
 
-3. Install current dir in editable mode:
+4. Install current dir in editable mode:
 
 `$ pip install -e .`
 
