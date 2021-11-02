@@ -1,6 +1,7 @@
 '''
 class to access CLI functionality of intel power gadget
 TODO:
+    - update to get more info that just joules?
     - test for mac - application default binary
     - find better way than sleep.wait(1) to wait for IntelPowerGadget app to open
 '''
