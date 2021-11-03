@@ -5,7 +5,8 @@ utility helper functions
 
 import numpy as np
 from tqdm import tqdm
-
+import re
+from csv import reader 
 
 '''
 dummy function for testing with
@@ -18,12 +19,14 @@ def dummy_compute(iters=20):
     return
 
 '''
-read joules from csv file (mauro update this)
+read joules from csv file
 '''
 def read_joules(csv_file):
     with open(csv_file, 'r') as file:
-        joules = file.readlines()[-3]
-    return float(joules[34:-1])
+        line = reader(file)
+        for row in line:
+            if len(row)>0 and 'Average IA' in row[0]:
+                return float(re.findall("\d+\.\d+", row[0])[0])
 
 def check_written(file):
     '''
