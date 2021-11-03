@@ -42,14 +42,14 @@ def test_csv_removed():
     assert os.path.exists(monitor.csv_file) == False
     
 def test_read_joules():
-    file_names = ['PwrData_2021-10-29-13-4-0.csv,
-                  'PwrData_2021-10-29-13-2-26.csv',
-                  'PwrData_2021-10-29-13-3-19.csv',
-                  'PwrData_2021-10-29-13-2-14.csv']
+    file_names = ['data/PwrData_2021-10-29-13-4-0.csv',
+                  'data/PwrData_2021-10-29-13-2-26.csv',
+                  'data/PwrData_2021-10-29-13-3-19.csv',
+                  'data/PwrData_2021-10-29-13-2-14.csv']
     list_joules = []
     for idx, file_name in enumerate(file_names):
         list_joules.append(energy_monitor.utils.read_joules(file_name))
-    assert list_joules == ['1.511089', '2.934142', '1.778402', '1.605088']
+    assert list_joules == [1.511089, 2.934142, 1.778402, 1.605088]
         
         
         
