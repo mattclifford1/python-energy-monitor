@@ -22,11 +22,17 @@ def dummy_compute(iters=20):
 read joules from csv file
 '''
 def read_joules(csv_file):
+    dict_results = dict()
     with open(csv_file, 'r') as file:
         line = reader(file)
         for row in line:
-            if len(row)>0 and 'Average IA' in row[0]:
-                return float(re.findall("\d+\.\d+", row[0])[0])
+            if len(row) > 0 and bool(re.match(r"Average IA Power", row[0])):
+                dict_results['average_ia'] = float(re.findall(r"\d+\.\d+", row[0])[0])
+            elif len(row) > 0 and bool(re.match(r"Total Elapsed Time", row[0])):
+                dict_results['time'] = float(re.findall(r"\d+\.\d+", row[0])[0])
+            elif len(row) > 0 and bool(re.match(r"Cumulative IA Energy_\d+ \(Joules\)", row[0])):
+                dict_results['cumulative_ia'] = float(re.findall(r"\d+\.\d+", row[0])[0])
+    return dict_results
 
 def check_written(file):
     '''
