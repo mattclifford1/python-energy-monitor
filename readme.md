@@ -1,3 +1,6 @@
+# Energy Monitor Python Package
+[energy_monitor](./energy_monitor) is a python package that automatically records, logs and visualises the energy comsuption of developing and testing python programs.
+
 # Python Setup
 Use either the automatic or manual setup process as described below
 
