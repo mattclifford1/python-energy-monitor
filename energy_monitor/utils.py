@@ -8,6 +8,7 @@ from tqdm import tqdm
 import re
 from csv import reader, writer
 import os
+from datetime import timedelta
 
 '''
 dummy function for testing with
@@ -18,6 +19,46 @@ def dummy_compute(iters=20):
         b = np.arange(3*40*5*600)[::-1].reshape((5,40,600,3))
         np.dot(a, b)[2,3,2,1,2,2]
     return
+
+'''
+PwrData.csv utils
+'''
+def get_PwrData_csv(datetime_obj):
+    '''
+    get start time +-1 second incase of discrepancies
+    '''
+    csv_list = []
+    for sec in [-1, 0, 1]:
+        adjusted_datetime = datetime_obj + timedelta(seconds=sec)
+        csv_list.append(_construct_PwrData_csv_name(adjusted_datetime))
+    return csv_list
+
+def _construct_PwrData_csv_name(datetime_obj):
+    '''
+    get PwdData file name from datetime object
+    '''
+    name = 'PwrData_'
+    name += str(datetime_obj.year) + '-'
+    name += str(datetime_obj.month) + '-'
+    name += str(datetime_obj.day) + '-'
+    name += str(datetime_obj.hour) + '-'
+    name += str(datetime_obj.minute) + '-'
+    name += str(datetime_obj.second) + '.csv'
+    return os.path.join(os.path.expanduser("~"), 'Documents', name)
+'''
+datetime string constuction
+'''
+def get_date_string(datetime_obj):
+    '''
+    convert datetime object into string format
+    '''
+    date = str(datetime_obj.year) + '-'
+    date += str(datetime_obj.month) + '-'
+    date += str(datetime_obj.day) + '-'
+    date += str(datetime_obj.hour) + '-'
+    date += str(datetime_obj.minute) + '-'
+    date += str(datetime_obj.second)
+    return date
 
 '''
 read joules from csv file
@@ -45,10 +86,10 @@ def check_written(file):
         return True
     except PermissionError:
         return False
-    
+
 def log_data(csv_filepath, dictionary):
     '''
-    store the dictionary into a .csv file 
+    store the dictionary into a .csv file
     '''
     # if doesn't exist: 'w' else 'a'
     if not os.path.isfile(csv_filepath):

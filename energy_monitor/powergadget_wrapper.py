@@ -77,12 +77,12 @@ class monitor:
         # remove csv log
         os.remove(self.csv_file)
         # log monitor data
-        self.power_gadget_data['date'] = get_date_string(self.start_time)
+        self.power_gadget_data['date'] = utils.get_date_string(self.start_time)
         self.power_gadget_data['name'] = self.name
-        # utils.log_data(self.log_filepath, self.power_gadget_data)
+        utils.log_data(self.log_filepath, self.power_gadget_data)
 
     def check_PwrData_csv_exists(self):
-        for file in get_PwrData_csv(self.start_time):
+        for file in utils.get_PwrData_csv(self.start_time):
             if os.path.isfile(file):
                 self.csv_file = file
                 return True
@@ -100,45 +100,7 @@ class monitor:
     def __del__(self):
         # close app upon garbage collection
         self.kill_proc()
-
-
-# csv utils
-def get_PwrData_csv(datetime_obj):
-    '''
-    get start time +-1 second incase of discrepancies
-    '''
-    csv_list = []
-    for sec in [-1, 0, 1]:
-        adjusted_datetime = datetime_obj + timedelta(seconds=sec)
-        csv_list.append(_construct_PwrData_csv_name(adjusted_datetime))
-    return csv_list
-
-def _construct_PwrData_csv_name(datetime_obj):
-    '''
-    get PwdData file name from datetime object
-    '''
-    name = 'PwrData_'
-    name += str(datetime_obj.year) + '-'
-    name += str(datetime_obj.month) + '-'
-    name += str(datetime_obj.day) + '-'
-    name += str(datetime_obj.hour) + '-'
-    name += str(datetime_obj.minute) + '-'
-    name += str(datetime_obj.second) + '.csv'
-    return os.path.join(os.path.expanduser("~"), 'Documents', name)
-
-# datetime utils
-def get_date_string(datetime_obj):
-    '''
-    convert datetime object into string format
-    '''
-    date = str(datetime_obj.year) + '-'
-    date += str(datetime_obj.month) + '-'
-    date += str(datetime_obj.day) + '-'
-    date += str(datetime_obj.hour) + '-'
-    date += str(datetime_obj.minute) + '-'
-    date += str(datetime_obj.second)
-    return date
-
+        
 
 if __name__ == '__main__':
     # with monitor() as mon1:
