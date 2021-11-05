@@ -59,7 +59,8 @@ class monitor:
                 time.sleep(0.1)
             self.recording = False
         # save what we need from csv
-        self.joules = utils.read_joules(self.csv_file)
+        self.power_gadget_data = utils.read_csv(self.csv_file)
+        self.joules = self.power_gadget_data['cumulative_ia']
         # close recording
         self.kill_proc()
         # remove csv log

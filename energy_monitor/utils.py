@@ -6,7 +6,7 @@ utility helper functions
 import numpy as np
 from tqdm import tqdm
 import re
-from csv import reader 
+from csv import reader
 
 '''
 dummy function for testing with
@@ -21,7 +21,7 @@ def dummy_compute(iters=20):
 '''
 read joules from csv file
 '''
-def read_joules(csv_file):
+def read_csv(csv_file):
     dict_results = dict()
     with open(csv_file, 'r') as file:
         line = reader(file)
