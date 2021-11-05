@@ -1,7 +1,6 @@
 '''
 class to access CLI functionality of intel power gadget
 TODO:
-    - update to get more info that just joules?
     - test for mac - application default binary
     - find better way than sleep.wait(1) to wait for IntelPowerGadget app to open
 '''
@@ -14,23 +13,35 @@ import time
 from energy_monitor import utils
 
 class monitor:
-    def __init__(self, non_standard_location=False):
+    '''
+    monitor energy using IntelPowerGadget
+    args:
+        - name (str):
+        - non_standard_binary_path: use if IntelPowerGadget is installed in a non stand location
+        - log_filepath: where to log energy data to (default is inside user's Documents)
+    '''
+    def __init__(self, name='Monitor Test',
+                       non_standard_binary_path=False,
+                       log_filepath=os.path.join(os.path.expanduser("~"), 'Documents', 'energy_monitor_log.csv')):
         self.system_os = platform.system()
-        self.non_standard_location = non_standard_location
+        self.name = name
+        self.non_standard_binary_path = non_standard_binary_path
+        self.log_filepath = log_filepath
         self.app_running = False
         self.recording = False
         self.locate_bin()
+        # TODO: check log filepath is '.csv' format
 
     def __enter__(self):
         # for use with 'with' statement enter
         return self
 
     def locate_bin(self):
-        if self.non_standard_location: # user provided alternate binary file location
-            if type(self.non_standard_location) not in [str]:  # check valid input format
-                raise ValueError('argument: non_standard_location={arg} needs to be type str'.format(arg=repr(self.non_standard_location)))
+        if self.non_standard_binary_path: # user provided alternate binary file location
+            if type(self.non_standard_binary_path) not in [str]:  # check valid input format
+                raise ValueError('argument: non_standard_binary_path={arg} needs to be type str'.format(arg=repr(self.non_standard_binary_path)))
             else:
-                self.bin = self.non_standard_location
+                self.bin = self.non_standard_binary_path
         else: # use standard application binary location
             if self.system_os == 'Windows':
                 self.bin = '"C:\\Program Files\\Intel\\Power Gadget 3.6\\IntelPowerGadget.exe"'
@@ -53,7 +64,7 @@ class monitor:
     def stop(self):
         if self.recording:
             os.system(self.bin + ' -stop')  # CLI stop recording
-            while not self.csv_exists(): # wait for csv to be created
+            while not self.check_PwrData_csv_exists(): # wait for csv to be created
                 time.sleep(0.1)
             while not utils.check_written(self.csv_file): # wait for csv to be written
                 time.sleep(0.1)
@@ -65,35 +76,17 @@ class monitor:
         self.kill_proc()
         # remove csv log
         os.remove(self.csv_file)
+        # log monitor data
+        self.power_gadget_data['date'] = get_date_string(self.start_time)
+        self.power_gadget_data['name'] = self.name
+        # utils.log_data(self.log_filepath, self.power_gadget_data)
 
-    def csv_exists(self):
-        for file in self.get_csv_list():
+    def check_PwrData_csv_exists(self):
+        for file in get_PwrData_csv(self.start_time):
             if os.path.isfile(file):
                 self.csv_file = file
                 return True
         return False
-
-    def get_csv_list(self):
-        '''
-        get start time +-1 second incase of discrepancies
-        '''
-        csv_list = []
-        start_datetime = self.start_time
-        for sec in [-1, 0, 1]:
-            adjusted_datetime = start_datetime + timedelta(seconds=sec)
-            csv_list.append(self._csv_name(adjusted_datetime))
-        return csv_list
-
-    def _csv_name(self, datetime_obj):
-        name = 'PwrData_'
-        name += str(datetime_obj.year) + '-'
-        name += str(datetime_obj.month) + '-'
-        name += str(datetime_obj.day) + '-'
-        name += str(datetime_obj.hour) + '-'
-        name += str(datetime_obj.minute) + '-'
-        name += str(datetime_obj.second)
-        name += '.csv'
-        return os.path.join(os.path.expanduser("~"), 'Documents', name)
 
     def kill_proc(self):
         if self.app_running:
@@ -107,6 +100,45 @@ class monitor:
     def __del__(self):
         # close app upon garbage collection
         self.kill_proc()
+
+
+# csv utils
+def get_PwrData_csv(datetime_obj):
+    '''
+    get start time +-1 second incase of discrepancies
+    '''
+    csv_list = []
+    for sec in [-1, 0, 1]:
+        adjusted_datetime = datetime_obj + timedelta(seconds=sec)
+        csv_list.append(_construct_PwrData_csv_name(adjusted_datetime))
+    return csv_list
+
+def _construct_PwrData_csv_name(datetime_obj):
+    '''
+    get PwdData file name from datetime object
+    '''
+    name = 'PwrData_'
+    name += str(datetime_obj.year) + '-'
+    name += str(datetime_obj.month) + '-'
+    name += str(datetime_obj.day) + '-'
+    name += str(datetime_obj.hour) + '-'
+    name += str(datetime_obj.minute) + '-'
+    name += str(datetime_obj.second) + '.csv'
+    return os.path.join(os.path.expanduser("~"), 'Documents', name)
+
+# datetime utils
+def get_date_string(datetime_obj):
+    '''
+    convert datetime object into string format
+    '''
+    date = str(datetime_obj.year) + '-'
+    date += str(datetime_obj.month) + '-'
+    date += str(datetime_obj.day) + '-'
+    date += str(datetime_obj.hour) + '-'
+    date += str(datetime_obj.minute) + '-'
+    date += str(datetime_obj.second)
+    return date
+
 
 if __name__ == '__main__':
     # with monitor() as mon1:

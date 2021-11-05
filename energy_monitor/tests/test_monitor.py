@@ -8,6 +8,10 @@ import platform
 import pytest
 import energy_monitor
 
+def test_name():
+    monitor = energy_monitor.monitor(name='energy1')
+    assert monitor.name == 'energy1'
+
 def test_standard_input():
     # standard input args
     monitor = energy_monitor.monitor()
@@ -16,16 +20,16 @@ def test_standard_input():
 
 def test_non_standard_input():
     # non standard file location
-    monitor = energy_monitor.monitor(non_standard_location='/bin/loc.bin')
+    monitor = energy_monitor.monitor(non_standard_binary_path='/bin/loc.bin')
     assert monitor.bin == '/bin/loc.bin'
 
-def test_input_error():
+def test_arg_non_standard_binary_path_error():
     # # test error for non string
     args=[True, 0.1]
     for arg in args:
         with pytest.raises(ValueError) as val_error:
-            monitor = energy_monitor.monitor(non_standard_location=arg)
-        assert str(val_error.value) == 'argument: non_standard_location={arg} needs to be type str'.format(arg=repr(arg))
+            monitor = energy_monitor.monitor(non_standard_binary_path=arg)
+        assert str(val_error.value) == 'argument: non_standard_binary_path={arg} needs to be type str'.format(arg=repr(arg))
 
 def test_joules_value():
     monitor = energy_monitor.monitor()
@@ -40,6 +44,3 @@ def test_csv_removed():
     energy_monitor.utils.dummy_compute(2)
     monitor.stop()
     assert os.path.exists(monitor.csv_file) == False
-        
-        
-        
