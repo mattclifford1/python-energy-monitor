@@ -6,7 +6,8 @@ utility helper functions
 import numpy as np
 from tqdm import tqdm
 import re
-from csv import reader
+from csv import reader, writer
+import os
 
 '''
 dummy function for testing with
@@ -44,3 +45,21 @@ def check_written(file):
         return True
     except PermissionError:
         return False
+    
+def log_data(csv_filepath, dictionary):
+    '''
+    store the dictionary into a .csv file 
+    '''
+    # if doesn't exist: 'w' else 'a'
+    if not os.path.isfile(csv_filepath):
+        with open(csv_filepath, 'w', newline='') as csvfile:
+            spamwriter = writer(csvfile, delimiter=',')
+            fields = list(dictionary.keys())
+            spamwriter.writerow(fields)
+            values = list(dictionary.values())
+            spamwriter.writerow(values)
+    else:
+        with open(csv_filepath, 'a', newline='') as csvfile:
+            spamwriter = writer(csvfile, delimiter=',')
+            values = list(dictionary.values())
+            spamwriter.writerow(values)
