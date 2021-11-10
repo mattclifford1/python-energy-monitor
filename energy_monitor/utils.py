@@ -34,6 +34,20 @@ def read_csv(csv_file):
                 dict_results['cumulative_ia'] = float(re.findall(r"\d+\.\d+", row[0])[0])
     return dict_results
 
+'''
+read the files that we generate and return a dictionary
+'''
+def read_results(result_file):
+    dict_results = dict()
+    with open(result_file, 'r') as file:
+        lines = file.readlines()
+        lines = [word.replace('\n', '') for word in lines]
+        keys = lines[0].split(',')
+        lines_splitted = [_.split(',') for _ in lines[1:]]
+        for idx, key in enumerate(keys):
+            dict_results[key] = [float(line[idx]) for line in lines_splitted]
+        return dict_results                  
+
 def check_written(file):
     '''
     check if a file has done being written todo
