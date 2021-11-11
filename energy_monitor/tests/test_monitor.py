@@ -56,3 +56,17 @@ def test_os_support_error():
         with pytest.raises(OSError) as OS_error:
             monitor._locate_bin()
         assert str(OS_error.value) == 'Intel Power Gadget not support on operating system: {arg}'.format(arg=repr(arg))
+
+def test_background_watts():
+    monitor = energy_monitor.monitor(remove_background_energy=True)
+    monitor.start()
+    energy_monitor.utils.dummy_compute(2)
+    monitor.stop()
+    assert monitor.background_watts != 0
+
+def test_no_background_watts():
+    monitor = energy_monitor.monitor(remove_background_energy=False)
+    monitor.start()
+    energy_monitor.utils.dummy_compute(2)
+    monitor.stop()
+    assert monitor.background_watts == 0

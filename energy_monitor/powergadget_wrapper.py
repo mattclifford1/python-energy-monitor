@@ -22,19 +22,17 @@ class monitor:
     '''
     def __init__(self, name='Monitor Test',
                        non_standard_binary_path=False,
+                       remove_background_energy=False,
                        log_filepath=os.path.join(os.path.expanduser("~"), 'Documents', 'energy_monitor_log.csv')):
         self.system_os = platform.system()
         self.name = name
         self.non_standard_binary_path = non_standard_binary_path
+        self.remove_background_energy = remove_background_energy
         self.log_filepath = log_filepath
         self.app_running = False
         self.recording = False
         self._locate_bin()
         # TODO: check log filepath is '.csv' format
-
-    def __enter__(self):
-        # for use with 'with' statement enter
-        return self
 
     def _locate_bin(self):
         if self.non_standard_binary_path: # user provided alternate binary file location
@@ -51,21 +49,36 @@ class monitor:
             else:
                 raise OSError('Intel Power Gadget not support on operating system: {arg}'.format(arg=repr(self.system_os)))
 
-    def start(self):
-        '''
-        start monitoring energy by opening Intel Power Gadegt
-        '''
+    def _start_cmd(self):
         self._open_app() # make sure IntelPowerGadget is running
-        time.sleep(0.1)  # quick calls to 'start' sometimes fail
         os.system(self.bin + ' -start')
         self.start_time = datetime.now() # log start time to know file name
         self.recording = True
 
+    def _get_background_energy(self):
+        background_time = 1 # TODO: have this as user input
+        if self.remove_background_energy:
+            self._start_cmd()
+            time.sleep(background_time)
+            self._stop_read_delete()
+            self.background_energy = self.joules
+        else:
+            self.background_energy = 0
+        self.background_watts = self.background_energy/background_time
+
+    def start(self):
+        '''
+        start monitoring energy by opening Intel Power Gadegt
+        '''
+        self._get_background_energy()
+        self._start_cmd()
+
     def _open_app(self):
         # open in a subprocess so we dont have to wait for a return which causes code to hang
-        self.proc = subprocess.Popen(self.bin)
-        time.sleep(1) # TODO: find better way to know when program has opened (it doesn't return and codes from CLI)
-        self.app_running = True
+        if not self.app_running:
+            self.proc = subprocess.Popen(self.bin)
+            time.sleep(1) # TODO: find better way to know when program has opened (it doesn't return and codes from CLI)
+            self.app_running = True
 
     def _stop_read_delete(self):
         if self.recording:
@@ -105,6 +118,10 @@ class monitor:
         if self.app_running:
             self.proc.kill()
             self.app_running = False
+
+    def __enter__(self):
+        # for use with 'with' statement enter
+        return self
 
     def __exit__(self, exc_type, exc_value, traceback):
         # for use with 'with' statement exit
