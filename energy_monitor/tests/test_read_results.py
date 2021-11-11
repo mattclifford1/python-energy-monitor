@@ -13,6 +13,6 @@ def test_read():
     filename = 'energy_monitor/tests/data/test1.csv'
     dict_result = energy_monitor.utils.read_results(filename)
     assert list(dict_result.keys()) == ['Time', 'Energy 1', 'Energy 2']
-    assert dict_result['Time'] == [1, 1, 2, 2]
-    assert dict_result['Energy 1'] == [3, 3, 4, 4]
-    assert dict_result['Energy 2'] == [5, 5, 6, 6]
+    assert dict_result['Time'] == [10.23, 10.23]
+    assert dict_result['Energy 1'] == [100.23, 100.23]
+    assert dict_result['Energy 2'] == [54.92, 54.92]
