@@ -29,14 +29,14 @@ class monitor:
         self.log_filepath = log_filepath
         self.app_running = False
         self.recording = False
-        self.locate_bin()
+        self._locate_bin()
         # TODO: check log filepath is '.csv' format
 
     def __enter__(self):
         # for use with 'with' statement enter
         return self
 
-    def locate_bin(self):
+    def _locate_bin(self):
         if self.non_standard_binary_path: # user provided alternate binary file location
             if type(self.non_standard_binary_path) not in [str]:  # check valid input format
                 raise ValueError('argument: non_standard_binary_path={arg} needs to be type str'.format(arg=repr(self.non_standard_binary_path)))
@@ -52,22 +52,25 @@ class monitor:
                 raise OSError('Intel Power Gadget not support on operating system: {arg}'.format(arg=repr(self.system_os)))
 
     def start(self):
-        self.open_app() # make sure IntelPowerGadget is running
+        '''
+        start monitoring energy by opening Intel Power Gadegt
+        '''
+        self._open_app() # make sure IntelPowerGadget is running
         time.sleep(0.1)  # quick calls to 'start' sometimes fail
         os.system(self.bin + ' -start')
         self.start_time = datetime.now() # log start time to know file name
         self.recording = True
 
-    def open_app(self):
+    def _open_app(self):
         # open in a subprocess so we dont have to wait for a return which causes code to hang
         self.proc = subprocess.Popen(self.bin)
         time.sleep(1) # TODO: find better way to know when program has opened (it doesn't return and codes from CLI)
         self.app_running = True
 
-    def stop(self):
+    def _stop_read_delete(self):
         if self.recording:
             os.system(self.bin + ' -stop')  # CLI stop recording
-            while not self.check_PwrData_csv_exists(): # wait for csv to be created
+            while not self._check_PwrData_csv_exists(): # wait for csv to be created
                 time.sleep(0.1)
             while not utils.check_written(self.csv_file): # wait for csv to be written
                 time.sleep(0.1)
@@ -76,33 +79,40 @@ class monitor:
         self.power_gadget_data = utils.read_csv(self.csv_file)
         self.joules = self.power_gadget_data['cumulative_ia']
         # close recording
-        self.kill_proc()
+        self._kill_proc()
         # remove csv log
         os.remove(self.csv_file)
+
+    def stop(self):
+        '''
+        stop monitoring energy, read logs, delete tempory csv file from Intel Power Gadget
+        then log data to database
+        '''
+        self._stop_read_delete()
         # log monitor data
         self.power_gadget_data['date'] = utils.get_date_string(self.start_time)
         self.power_gadget_data['name'] = self.name
         utils.log_data(self.log_filepath, self.power_gadget_data)
 
-    def check_PwrData_csv_exists(self):
+    def _check_PwrData_csv_exists(self):
         for file in utils.get_PwrData_csv(self.start_time):
             if os.path.isfile(file):
                 self.csv_file = file
                 return True
         return False
 
-    def kill_proc(self):
+    def _kill_proc(self):
         if self.app_running:
             self.proc.kill()
             self.app_running = False
 
     def __exit__(self, exc_type, exc_value, traceback):
         # for use with 'with' statement exit
-        self.kill_proc()
+        self._kill_proc()
 
     def __del__(self):
         # close app upon garbage collection
-        self.kill_proc()
+        self._kill_proc()
 
 
 if __name__ == '__main__':
