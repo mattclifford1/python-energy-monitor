@@ -42,11 +42,14 @@ class monitor:
                 raise ValueError('argument: non_standard_binary_path={arg} needs to be type str'.format(arg=repr(self.non_standard_binary_path)))
             else:
                 self.bin = self.non_standard_binary_path
+            # TODO: now test the bin file exists
         else: # use standard application binary location
             if self.system_os == 'Windows':
                 self.bin = '"C:\\Program Files\\Intel\\Power Gadget 3.6\\IntelPowerGadget.exe"'
             elif self.system_os == 'Darwin':
                 self.bin = '/Applications/Intel/IntelPowerGadget.bin'
+            else:
+                raise OSError('Intel Power Gadget not support on operating system: {arg}'.format(arg=repr(self.system_os)))
 
     def start(self):
         self.open_app() # make sure IntelPowerGadget is running
@@ -100,7 +103,7 @@ class monitor:
     def __del__(self):
         # close app upon garbage collection
         self.kill_proc()
-        
+
 
 if __name__ == '__main__':
     # with monitor() as mon1:

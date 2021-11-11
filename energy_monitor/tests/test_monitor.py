@@ -44,3 +44,12 @@ def test_csv_removed():
     energy_monitor.utils.dummy_compute(2)
     monitor.stop()
     assert os.path.exists(monitor.csv_file) == False
+
+def test_os_support_error():
+    monitor = energy_monitor.monitor()
+    os_args = ['random-os', 'Linux']
+    for arg in os_args:
+        monitor.system_os = arg
+        with pytest.raises(OSError) as OS_error:
+            monitor.locate_bin()
+        assert str(OS_error.value) == 'Intel Power Gadget not support on operating system: {arg}'.format(arg=repr(arg))
