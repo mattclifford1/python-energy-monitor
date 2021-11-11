@@ -70,3 +70,11 @@ def test_no_background_watts():
     energy_monitor.utils.dummy_compute(2)
     monitor.stop()
     assert monitor.background_watts == 0
+
+def test_non_neg_joules_watts():
+    monitor = energy_monitor.monitor(remove_background_energy=True)
+    monitor.start()
+    energy_monitor.utils.dummy_compute(2)
+    monitor.stop()
+    assert monitor.power_gadget_data['cumulative_ia'] > 0
+    assert monitor.power_gadget_data['average_ia'] > 0

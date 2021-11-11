@@ -56,15 +56,15 @@ class monitor:
         self.recording = True
 
     def _get_background_energy(self):
-        background_time = 1 # TODO: have this as user input
+        self.background_time = 1 # TODO: have this as user input
         if self.remove_background_energy:
             self._start_cmd()
-            time.sleep(background_time)
+            time.sleep(self.background_time)
             self._stop_read_delete()
             self.background_energy = self.joules
         else:
             self.background_energy = 0
-        self.background_watts = self.background_energy/background_time
+        self.background_watts = self.background_energy/self.background_time
 
     def start(self):
         '''
@@ -105,6 +105,8 @@ class monitor:
         # log monitor data
         self.power_gadget_data['date'] = utils.get_date_string(self.start_time)
         self.power_gadget_data['name'] = self.name
+        self.power_gadget_data['cumulative_ia'] -= self.background_watts*self.power_gadget_data['time']
+        self.power_gadget_data['average_ia'] -= self.background_watts
         utils.log_data(self.log_filepath, self.power_gadget_data)
 
     def _check_PwrData_csv_exists(self):
@@ -134,8 +136,11 @@ class monitor:
 
 if __name__ == '__main__':
     # with monitor() as mon1:
-    mon1 = monitor()
+    mon1 = monitor(remove_background_energy=True)
     mon1.start()
     utils.dummy_compute(20)
     mon1.stop()
     print('Joules used: ', mon1.joules)
+    print(mon1.power_gadget_data)
+    print(mon1.background_watts)
+    print(mon1.background_energy)
