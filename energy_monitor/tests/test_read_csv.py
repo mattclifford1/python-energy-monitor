@@ -6,7 +6,7 @@ import pytest
 import energy_monitor
 
 def test_read_joules_1():
-    filename = 'energy_monitor/tests/data/PwrData_2021-10-29-13-4-0.csv'
+    filename = 'energy_monitor/tests/data_examples/PwrData_2021-10-29-13-4-0.csv'
     result = energy_monitor.utils.read_csv(filename)
     print(result.keys())
     assert result['average_ia'] == 1.511089
@@ -14,21 +14,21 @@ def test_read_joules_1():
     assert result['cumulative_ia'] == 13.317383
 
 def test_read_joules_2():
-    filename = 'energy_monitor/tests/data/PwrData_2021-10-29-13-2-26.csv'
+    filename = 'energy_monitor/tests/data_examples/PwrData_2021-10-29-13-2-26.csv'
     result = energy_monitor.utils.read_csv(filename)
     assert result['average_ia'] == 2.934142
     assert result['time'] == 34.866384
     assert result['cumulative_ia'] == 102.302917
 
 def test_read_joules_3():
-    filename = 'energy_monitor/tests/data/PwrData_2021-10-29-13-3-19.csv'
+    filename = 'energy_monitor/tests/data_examples/PwrData_2021-10-29-13-3-19.csv'
     result = energy_monitor.utils.read_csv(filename)
     assert result['average_ia'] == 1.778402
     assert result['time'] == 36.438335
     assert result['cumulative_ia'] == 64.802002
 
 def test_read_joules_4():
-    filename = 'energy_monitor/tests/data/PwrData_2021-10-29-13-2-14.csv'
+    filename = 'energy_monitor/tests/data_examples/PwrData_2021-10-29-13-2-14.csv'
     result = energy_monitor.utils.read_csv(filename)
     assert result['average_ia'] == 1.605088
     assert result['time'] == 6.872600

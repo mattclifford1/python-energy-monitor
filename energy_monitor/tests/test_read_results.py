@@ -10,7 +10,7 @@ import pytest
 import energy_monitor
 
 def test_read():
-    filename = 'energy_monitor/tests/data/test1.csv'
+    filename = 'energy_monitor/tests/data_examples/test1.csv'
     dict_result = energy_monitor.utils.read_results(filename)
     assert list(dict_result.keys()) == ['Time', 'Energy 1', 'Energy 2']
     assert dict_result['Time'] == [1, 1, 2, 2]

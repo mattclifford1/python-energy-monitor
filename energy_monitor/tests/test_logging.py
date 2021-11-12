@@ -11,7 +11,7 @@ import os
 
 def test_log_data():
     dictionary = {'Time': 10.23, 'Energy 1': 100.23, 'Energy 2': 54.92}
-    csv_filepath = os.path.join(os.getcwd(), 'energy_monitor', 'tests', 'data', 'test_write.csv')
+    csv_filepath = os.path.join(os.getcwd(), 'energy_monitor', 'tests', 'data_examples', 'test_write.csv')
     energy_monitor.utils.log_data(csv_filepath, dictionary)
 
     # TODO: test this with a csv_reader
