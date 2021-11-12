@@ -105,8 +105,11 @@ class monitor:
         # log monitor data
         self.power_gadget_data['date'] = utils.get_date_string(self.start_time)
         self.power_gadget_data['name'] = self.name
+        self.power_gadget_data['remove_background_energy'] = str(self.remove_background_energy)
+        # remove background
         self.power_gadget_data['cumulative_ia'] -= self.background_watts*self.power_gadget_data['time']
         self.power_gadget_data['average_ia'] -= self.background_watts
+        # log
         utils.log_data(self.log_filepath, self.power_gadget_data)
 
     def _check_PwrData_csv_exists(self):
