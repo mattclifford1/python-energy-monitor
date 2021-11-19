@@ -11,12 +11,12 @@ conda create -n $VENV python=3.8
 conda activate $VENV
 
 # install dependancies
-pip install --upgrade pip
+pip install --user --upgrade pip
 #pip install -r requirements.txt -f https://download.pytorch.org/whl/cpu/torch_stable.html
-pip install -r requirements-test.txt
+pip install --user -r requirements-test.txt
 
 # install current dir in editable mode
-pip install -e .
+pip install --user -e .
 
 # run tests
 pytest energy_monitor/tests/misc
