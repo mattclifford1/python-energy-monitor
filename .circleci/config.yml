@@ -1,10 +1,4 @@
 version: 2.1
-
-workflows:
-  build_test:
-    jobs:
-      - build_test
-      - test
       
 jobs:
   build_test:
@@ -16,3 +10,9 @@ jobs:
           command: |
             ./install.sh
             ./run_tests_server.sh
+            
+workflows:
+  build_test:
+    jobs:
+      - build_test
+      - test
