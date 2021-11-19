@@ -16,4 +16,4 @@ jobs:
             ./install.sh
       - run:
           command: |  # Run test suite
-           # pipenv run pytest
+           ./run_tests_server.sh
