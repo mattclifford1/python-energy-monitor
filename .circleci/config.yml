@@ -13,10 +13,12 @@ jobs:
       - checkout  # checkout source code to working directory
       - run:
           command: |  # create whl and use pipenv to install dependencies
-            python setup.py sdist bdist_wheel
-            sudo pip install pipenv
-            pipenv install dist/convrsn-0.0.2-py3-none-any.whl
-            pipenv install pytest
+           # python setup.py sdist bdist_wheel
+            #sudo pip install pipenv
+            #pipenv install dist/convrsn-0.0.2-py3-none-any.whl
+            #pipenv install pytest
+            sudo pip install -r requirements-test.txt
+            
       - run:
           command: |  # Run test suite
            # pipenv run pytest
