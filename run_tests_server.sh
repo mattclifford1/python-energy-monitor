@@ -1,3 +1,6 @@
+#!/bin/bash
+# run tests on server (CI)
+
 # make sure conda is accessable
 CONDA_BASE=$(conda info --base)
 source $CONDA_BASE/etc/profile.d/conda.sh
