@@ -16,7 +16,7 @@ jobs:
       - python/install-packages:
           pkg-manager: pip
           pip-dependency-file: 'requirements-test.txt'
-          args: '-f https://download.pytorch.org/whl/cpu/torch_stable.html'
+          # args: '-f https://download.pytorch.org/whl/cpu/torch_stable.html'
       - run:
           name: Run tests
           command: pytest energy_monitor/tests/misc
