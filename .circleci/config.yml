@@ -8,17 +8,12 @@ workflows:
 jobs:
   build_test:
     docker:
-      - image: cimg/python:3.8
+       - image: continuumio/miniconda3
     steps:
       - checkout  # checkout source code to working directory
       - run:
-          command: |  # create whl and use pipenv to install dependencies
-           # python setup.py sdist bdist_wheel
-            #sudo pip install pipenv
-            #pipenv install dist/convrsn-0.0.2-py3-none-any.whl
-            #pipenv install pytest
-            sudo pip install -r requirements-test.txt
-            
+          command: | 
+            ./setup.sh
       - run:
           command: |  # Run test suite
            # pipenv run pytest
