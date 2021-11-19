@@ -31,7 +31,7 @@ jobs:
       - checkout
       - python/install-packages:
           pkg-manager: pip
-          args: '-r requirements.txt -f https://download.pytorch.org/whl/cpu/torch_stable.html'
+          args: '-r requirements.txt -f https://download.pytorch.org/whl/cpu/torch_stable.html -e .'
       - run:
           name: Run tests
           # This assumes pytest is installed via the install-package step above
