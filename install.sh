@@ -17,6 +17,3 @@ pip install -r requirements-test.txt
 
 # install current dir in editable mode
 pip install -e .
-
-# run tests
-pytest energy_monitor/tests/misc
