@@ -10,20 +10,16 @@ jobs:
     docker:
        - image: continuumio/miniconda3
     steps:
-      - checkout  # checkout source code to working directory
-      # look for existing cache and restore if found
-      - restore_cache:
-          key: v1-deps-{{ checksum "requirements-test.txt" }}
-      # install dependencies 
-      - run:
+      - checkout       # pulls source code to the working directory
+      - restore_cache: # restores saved dependency cache if the Branch key template or requirements-test.txt files have not changed since the previous run
+          key: deps1-{{ .Branch }}-{{ checksum "requirements-test.txt" }}
+      - run:           # install dependencies 
           command: |
             ./install.sh
-      # save any changes to the cache
-      - save_cache:
-          key: v1-deps-{{ checksum "requirements-test.txt" }}
+      - save_cache:    # special step to save dependency cache
+          key: deps1-{{ .Branch }}-{{ checksum "requirements-test.txt" }}
           paths: 
-            - python_modules  
-      # run test suite
-      - run:
+            - "venv"
+      - run:           # run test suite
           command: |
             ./run_tests.sh
