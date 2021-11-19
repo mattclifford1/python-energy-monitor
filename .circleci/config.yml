@@ -12,7 +12,9 @@ jobs:
     steps:
       - checkout  # checkout source code to working directory
       - run:
-          command: | 
+          command: |
+            ls
+            pwd 
             ./setup.sh
       - run:
           command: |  # Run test suite
