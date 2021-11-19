@@ -15,7 +15,7 @@ jobs:
       - checkout
       - python/install-packages:
           pkg-manager: pip
-          pip-dependency-file: 'requirements-dev.txt'
+          pip-dependency-file: 'requirements-test.txt'
           args: '-f https://download.pytorch.org/whl/cpu/torch_stable.html'
       - run:
           name: Run tests
