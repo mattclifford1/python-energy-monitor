@@ -3,10 +3,16 @@
 # Energy Monitor Python Package
 [energy_monitor](./energy_monitor) is a python package that automatically records, logs and visualises the energy comsuption of developing and testing python programs.
 
+# Adding dependancies
+Put any package required dependancies in [requirements.txt](./requirements.txt) and also put them in [.circleci/requirements-test.txt](.circleci/requirements-test.txt) if they are required for testing using CI.
+
+# Adding tests
+Put any tests to be run on CI in the folder [energy_monitor/tests/misc](energy_monitor/tests/misc). Make sure to write tests for _ALL_ new functionality.
+
 # Python Setup
 Use either the automatic or manual setup process as described below
 
-### Automatic Setup
+### Automatic Setup (Linux)
 Use the install script to set up automatically:
 `$ ./install.sh`
 
