@@ -13,9 +13,7 @@ jobs:
       - checkout  # checkout source code to working directory
       - run:
           command: |
-            ls
-            pwd 
-            ./setup.sh
+            ./install.sh
       - run:
           command: |  # Run test suite
            # pipenv run pytest
