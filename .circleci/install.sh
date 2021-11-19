@@ -13,7 +13,7 @@ conda activate $VENV
 # install dependancies
 pip install --upgrade pip
 #pip install -r requirements.txt -f https://download.pytorch.org/whl/cpu/torch_stable.html
-pip install -r requirements.txt
+pip install -r .circleci/requirements-test.txt
 
 # install current dir in editable mode
 pip install -e .
