@@ -14,7 +14,6 @@ jobs:
       - run:
           command: |
             ./install.sh
+      - run:
+          command: |
             ./run_tests.sh
-#       - run:
-#           command: |  # Run test suite
-#            ./run_tests_server.sh
