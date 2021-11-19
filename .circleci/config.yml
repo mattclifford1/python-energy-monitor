@@ -1,13 +1,12 @@
 version: 2.1
 
 workflows:
-  sample:
+  build_and_test:
     jobs:
-      - build
-      - test
+      - build_test
       
 jobs:
-  build:
+  build_test:
     docker:
        - image: continuumio/miniconda3
     steps:
@@ -21,8 +20,6 @@ jobs:
           key: deps1-{{ .Branch }}-{{ checksum "requirements-test.txt" }}
           paths: 
             - "venv"
-  test:
-    steps:
       - run:           # run test suite
           command: |
             ./run_tests.sh
