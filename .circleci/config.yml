@@ -1,18 +1,25 @@
 version: 2.1
 
 workflows:
-  sample:
+  build_and_test:
     jobs:
       - build_test
-      - test
       
 jobs:
   build_test:
     docker:
        - image: continuumio/miniconda3
     steps:
-      - checkout  # checkout source code to working directory
-      - run:
+      - checkout       # pulls source code to the working directory
+      - restore_cache: # restores saved dependency cache if the Branch key template or requirements-test.txt files have not changed since the previous run
+          key: deps1-{{ .Branch }}-{{ checksum "requirements-test.txt" }}
+      - run:           # install dependencies 
           command: |
             ./install.sh
-            ./run_tests_server.sh
+      - save_cache:    # special step to save dependency cache
+          key: deps1-{{ .Branch }}-{{ checksum "requirements-test.txt" }}
+          paths: 
+            - "venv"
+      - run:           # run test suite
+          command: |
+            ./run_tests.sh
