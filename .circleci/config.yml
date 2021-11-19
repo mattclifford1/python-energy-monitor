@@ -13,14 +13,14 @@ jobs:
       - checkout  # checkout source code to working directory
       # look for existing cache and restore if found
       - restore_cache:
-          key: v1-deps-{{ checksum "package-lock.json" }}
+          key: v1-deps-{{ checksum "requirements-test.txt" }}
       # install dependencies 
       - run:
           command: |
             ./install.sh
       # save any changes to the cache
       - save_cache:
-          key: v1-deps-{{ checksum "package-lock.json" }}
+          key: v1-deps-{{ checksum "requirements-test.txt" }}
           paths: 
             - python_modules  
       # run test suite
