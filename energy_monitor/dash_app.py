@@ -35,7 +35,6 @@ if __name__ == "__main__":
     Input('test-names-dropdown', 'value')
     )
     def update_plot1(names):
-        #values = data[data==names]
         df = data[data['name'].isin(names)]
         fig = px.bar(df, x='name', y='cumulative_ia', title="Cumulative Energy for selected tests",
                     labels={'cumulative_ia':'Cumulative Energy [J]', 'name':'Test name'}
@@ -60,10 +59,7 @@ if __name__ == "__main__":
         print(timeseries)
         fig = px.line(x=np.arange(0, len(timeseries)), y=timeseries, title=f"Timeseries for {name}", 
         labels={'x': 'Indexes', 'y': 'Timeseries'})
-        
-        #fig = px.scatter(df,  y='timeseries_1', title="Cumulative Energy", color="name",
-        #            labels={'name_unique':'Test name', 'date':'Date'})
-        
+
         return fig
 
     # Dash histogram
