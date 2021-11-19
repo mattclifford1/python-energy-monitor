@@ -1,7 +1,7 @@
 version: 2.1
 
 workflows:
-  sample:
+  build_test:
     jobs:
       - build_test
       - test
