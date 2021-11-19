@@ -7,7 +7,7 @@
 Put any package required dependancies in [requirements.txt](./requirements.txt) and also put them in [.circleci/requirements-test.txt](.circleci/requirements-test.txt) if they are required for testing using CI.
 
 # Adding tests
-Put any tests to be run on CI in the folder [energy_monitor/tests/misc](energy_monitor/tests/misc). Make sure to write tests for *ALL* new functionality.
+Put any tests to be run on CI in the folder [energy_monitor/tests/misc](energy_monitor/tests/misc). Make sure to write tests for **ALL** new functionality.
 
 # Python Setup
 Use either the automatic or manual setup process as described below
