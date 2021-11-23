@@ -3,15 +3,14 @@ cpu % utilisation monitor/logging
 
 usage:
     args:
-        - interal (float):  frequency to sample % cpu utilisation
+        - TDP (int):         wattage of CPU (thermal design power)
+        - interval (float):  frequency to sample % cpu utilisation (0.5 default)
 
     methods:
         - stop():           stops monitoring
 
     attributes:
-        - time_taken (datetime.timedelta object)
-        - measurements (list)
-        - avg_cpu (float)   in %
+        - data (dict):      contains all relevant data collected and estimated
 '''
 # Author: Matt Clifford <matt.clifford@bristol.ac.uk>
 import threading
@@ -19,7 +18,8 @@ from datetime import datetime, timedelta
 import psutil
 
 class monitor_cpu:
-    def __init__(self, interval=0.5):
+    def __init__(self, TDP, interval=0.5):
+        self.TDP = TDP
         self.interval = interval
         self.monitoring = False
         self.measurements = []
@@ -46,9 +46,13 @@ class monitor_cpu:
             self.mean_cpu = 0
         else:
             self.mean_cpu = sum(self.measurements)/len(self.measurements)
-        self.data = {'timeseries':self.measurements,
-                     'mean':self.mean_cpu,
-                     'duration':self.time_taken.total_seconds()}
+        self.mean_watts = (self.mean_cpu/100)*self.TDP
+        self.duration = self.time_taken.total_seconds()
+        self.data = {'timeseries': self.measurements,
+                     'mean' :self.mean_cpu,
+                     'duration': self.duration,
+                     'Watts': self.mean_watts,
+                     'Joules': self.mean_watts*self.duration}
         return self.data
 
     def _stop_thread(self):
@@ -75,7 +79,7 @@ class monitor_cpu:
 if __name__ == '__main__':
     import time
     from energy_monitor import utils
-    m = monitor_cpu()
+    m = monitor_cpu(TDP=15)
     utils.dummy_compute(20)
     m.stop()
     print(m)

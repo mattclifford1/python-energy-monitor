@@ -10,7 +10,7 @@ import subprocess
 import platform
 from datetime import datetime, timedelta
 import time
-from energy_monitor import utils
+from energy_monitor import utils, cpu_util
 
 class monitor:
     '''
