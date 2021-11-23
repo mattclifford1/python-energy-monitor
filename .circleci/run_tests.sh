@@ -10,4 +10,5 @@ VENV=energy_monitor
 conda activate $VENV
 
 # run tests
-pytest energy_monitor/tests/misc
+# pytest energy_monitor/tests/misc
+pytest
