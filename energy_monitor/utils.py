@@ -88,7 +88,7 @@ def read_results(result_file):
         lines_splitted = [_.split(',') for _ in lines[1:]]
         for idx, key in enumerate(keys):
             dict_results[key] = [float(line[idx]) for line in lines_splitted]
-        return dict_results                  
+        return dict_results
 
 def check_written(file):
     '''
@@ -118,3 +118,6 @@ def log_data(csv_filepath, dictionary):
             spamwriter = writer(csvfile, delimiter=',')
             values = list(dictionary.values())
             spamwriter.writerow(values)
+
+def test_func():
+    print('hello')

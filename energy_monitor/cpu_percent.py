@@ -7,6 +7,7 @@ usage:
         - interval (float):  frequency to sample % cpu utilisation (0.5 default)
 
     methods:
+        - start()           starts monitoring (automatically called from __init__)
         - stop():           stops monitoring
 
     attributes:
@@ -17,16 +18,16 @@ import threading
 from datetime import datetime, timedelta
 import psutil
 
-class monitor_cpu:
+class monitor_cpu_percent:
     def __init__(self, TDP, interval=0.5):
         self.TDP = TDP
         self.interval = interval
         self.monitoring = False
+        self.start()
+
+    def start(self):
         self.measurements = []
         self.data = {}
-        self._start()
-
-    def _start(self):
         self.monitoring = True
         self._thread_monitor = threading.Thread(target=self._record, args=())
         self._thread_monitor.daemon = True
@@ -69,17 +70,17 @@ class monitor_cpu:
 
     def __exit__(self, exc_type, exc_value, traceback):
         # for use with 'with' statement exit
-        self._kill_proc()
+        self._stop_thread()
 
     def __del__(self):
         # close app upon garbage collection
-        self._kill_proc()
+        self._stop_thread()
 
-
-if __name__ == '__main__':
-    import time
-    from energy_monitor import utils
-    m = monitor_cpu(TDP=15)
-    utils.dummy_compute(20)
-    m.stop()
-    print(m)
+# 
+# if __name__ == '__main__':
+#     # import time
+#     # from energy_monitor import utils
+#     m = monitor_cpu_percent(TDP=15)
+#     utils.dummy_compute(20)
+#     m.stop()
+#     print(m)
