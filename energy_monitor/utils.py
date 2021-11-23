@@ -107,6 +107,8 @@ def log_data(csv_filepath, dictionary):
     '''
     # if doesn't exist: 'w' else 'a'
     if not os.path.isfile(csv_filepath):
+        # make sure directories exist before writing
+        os.makedirs(csv_filepath, exist_ok=True)
         with open(csv_filepath, 'w', newline='') as csvfile:
             spamwriter = writer(csvfile, delimiter=',')
             fields = list(dictionary.keys())
