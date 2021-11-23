@@ -18,7 +18,7 @@ import threading
 from datetime import datetime, timedelta
 import psutil
 
-class monitor_cpu_percent:
+class start_recording:
     def __init__(self, TDP, interval=0.5):
         self.TDP = TDP
         self.interval = interval
@@ -76,11 +76,11 @@ class monitor_cpu_percent:
         # close app upon garbage collection
         self._stop_thread()
 
-# 
+#
 # if __name__ == '__main__':
 #     # import time
 #     # from energy_monitor import utils
-#     m = monitor_cpu_percent(TDP=15)
+#     m = start_recording(TDP=15)
 #     utils.dummy_compute(20)
 #     m.stop()
 #     print(m)
