@@ -88,7 +88,7 @@ def read_results(result_file):
         lines_splitted = [_.split(',') for _ in lines[1:]]
         for idx, key in enumerate(keys):
             dict_results[key] = [float(line[idx]) for line in lines_splitted]
-        return dict_results                  
+        return dict_results
 
 def check_written(file):
     '''
@@ -107,6 +107,8 @@ def log_data(csv_filepath, dictionary):
     '''
     # if doesn't exist: 'w' else 'a'
     if not os.path.isfile(csv_filepath):
+        # make sure directories exist before writing
+        os.makedirs(os.path.split(csv_filepath)[0], exist_ok=True)
         with open(csv_filepath, 'w', newline='') as csvfile:
             spamwriter = writer(csvfile, delimiter=',')
             fields = list(dictionary.keys())
