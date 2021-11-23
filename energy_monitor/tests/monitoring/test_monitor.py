@@ -40,22 +40,13 @@ def test_joules_value():
     assert type(monitor.joules) == float
 
 def test_csv_removed():
-    # make sure temp csv log is removed
-    monitor = energy_monitor.monitor()
-    monitor.start()
-    energy_monitor.utils.dummy_compute(2)
-    monitor.stop()
-    assert os.path.exists(monitor.csv_file) == False
-
-def test_os_support_error():
-    # make sure correct error is given on unimplemented systems
-    monitor = energy_monitor.monitor()
-    os_args = ['random-os', 'Linux']
-    for arg in os_args:
-        monitor.system_os = arg
-        with pytest.raises(OSError) as OS_error:
-            monitor._locate_bin()
-        assert str(OS_error.value) == 'Intel Power Gadget not support on operating system: {arg}'.format(arg=repr(arg))
+    # make sure temp csv log is removed on IntelPowerGadget
+    if platform.system() == 'Windows':
+        monitor = energy_monitor.monitor()
+        monitor.start()
+        energy_monitor.utils.dummy_compute(2)
+        monitor.stop()
+        assert os.path.exists(monitor.csv_file) == False
 
 def test_background_watts():
     monitor = energy_monitor.monitor(remove_background_energy=True)
@@ -71,10 +62,10 @@ def test_no_background_watts():
     monitor.stop()
     assert monitor.background_watts == 0
 
-def test_non_neg_joules_watts():
-    monitor = energy_monitor.monitor(remove_background_energy=True)
-    monitor.start()
-    energy_monitor.utils.dummy_compute(2)
-    monitor.stop()
-    assert monitor.power_gadget_data['cumulative_ia'] > 0
-    assert monitor.power_gadget_data['average_ia'] > 0
+# def test_non_neg_joules_watts():
+#     monitor = energy_monitor.monitor(remove_background_energy=True)
+#     monitor.start()
+#     energy_monitor.utils.dummy_compute(2)
+#     monitor.stop()
+#     assert monitor.power_gadget_data['cumulative_ia'] > 0
+#     assert monitor.power_gadget_data['average_ia'] > 0

@@ -51,9 +51,9 @@ class start_recording:
         self.duration = self.time_taken.total_seconds()
         self.data = {'timeseries': self.measurements,
                      'mean' :self.mean_cpu,
-                     'duration': self.duration,
-                     'Watts': self.mean_watts,
-                     'Joules': self.mean_watts*self.duration}
+                     'time': self.duration,
+                     'average_ia': self.mean_watts,
+                     'cumulative_ia': self.mean_watts*self.duration}
         return self.data
 
     def _stop_thread(self):

@@ -20,9 +20,9 @@ def test_values():
     data = m.stop()
     assert type(data['timeseries']) == list
     assert type(data['mean']) == float
-    assert type(data['duration']) == float
-    assert type(data['Watts']) == float
-    assert type(data['Joules']) == float
+    assert type(data['time']) == float
+    assert type(data['average_ia']) == float
+    assert type(data['cumulative_ia']) == float
 
 def test_recorded1():
     m = energy_monitor.cpu_percent.start_recording(TDP=15, interval=0.1)
