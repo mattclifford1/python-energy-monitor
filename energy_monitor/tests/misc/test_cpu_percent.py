@@ -9,7 +9,11 @@ import os
 def test_args():
     tdp = 20
     inter = 0.1
+    print(os.getcwd())
+    print(dir(energy_monitor))
+    print(dir(energy_monitor.utils))
     energy_monitor.utils.dummy_compute(2)
+    energy_monitor.utils.test_func()
     m = energy_monitor.cpu_percent.monitor_cpu_percent(TDP=tdp, interval=inter)
     assert m.TDP == tdp
     assert m.interval == inter
