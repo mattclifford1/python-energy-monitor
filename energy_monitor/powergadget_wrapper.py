@@ -32,6 +32,7 @@ class monitor:
         self.app_running = False
         self.recording = False
         self._locate_bin()
+        self.power_gadget_data = {}
         # TODO: check log filepath is '.csv' format
 
     def _locate_bin(self):
@@ -124,6 +125,9 @@ class monitor:
             self.proc.kill()
             self.app_running = False
 
+    def __str__(self):
+        return str(self.power_gadget_data)
+
     def __enter__(self):
         # for use with 'with' statement enter
         return self
@@ -143,7 +147,4 @@ if __name__ == '__main__':
     mon1.start()
     utils.dummy_compute(20)
     mon1.stop()
-    print('Joules used: ', mon1.joules)
-    print(mon1.power_gadget_data)
-    print(mon1.background_watts)
-    print(mon1.background_energy)
+    print(mon1)

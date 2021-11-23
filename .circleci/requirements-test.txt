@@ -3,3 +3,4 @@ pyJoules==0.5.1
 tqdm==4.62.3
 pandas==1.3.4
 pytest==6.2.5
+psutil
