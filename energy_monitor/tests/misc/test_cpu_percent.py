@@ -9,14 +9,29 @@ import os
 def test_args():
     tdp = 20
     inter = 0.1
-    print(os.getcwd())
-    print(dir(energy_monitor))
-    print(dir(energy_monitor.utils))
-    energy_monitor.utils.dummy_compute(2)
-    energy_monitor.utils.test_func()
     m = energy_monitor.cpu_percent.start_recording(TDP=tdp, interval=inter)
     assert m.TDP == tdp
     assert m.interval == inter
+    m.stop()
 
-if __name__ == '__main__':
-    test_args()
+def test_values():
+    m = energy_monitor.cpu_percent.start_recording(TDP=15, interval=0.1)
+    energy_monitor.utils.dummy_compute(10)
+    data = m.stop()
+    assert type(data['timeseries']) == list
+    assert type(data['mean']) == float
+    assert type(data['duration']) == float
+    assert type(data['Watts']) == float
+    assert type(data['Joules']) == float
+
+def test_recorded1():
+    m = energy_monitor.cpu_percent.start_recording(TDP=15, interval=0.1)
+    time.sleep(0.15) # slightly more than interval to make sure recorded
+    data = m.stop()
+    assert len(data['timeseries']) == 1
+
+def test_recorded2():
+    m = energy_monitor.cpu_percent.start_recording(TDP=15, interval=0.1)
+    time.sleep(0.25) # slightly more than interval to make sure recorded
+    data = m.stop()
+    assert len(data['timeseries']) == 2

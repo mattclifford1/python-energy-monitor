@@ -118,6 +118,3 @@ def log_data(csv_filepath, dictionary):
             spamwriter = writer(csvfile, delimiter=',')
             values = list(dictionary.values())
             spamwriter.writerow(values)
-
-def test_func():
-    print('hello')
