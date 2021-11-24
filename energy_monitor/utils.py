@@ -2,13 +2,14 @@
 utility helper functions
 '''
 # Author: Matt Clifford <matt.clifford@bristol.ac.uk>
-# test
+
 import numpy as np
 from tqdm import tqdm
 import re
 from csv import reader, writer
 import os
 from datetime import timedelta
+import pandas as pd
 
 '''
 dummy function for testing with
@@ -75,6 +76,15 @@ def read_csv(csv_file):
             elif len(row) > 0 and bool(re.match(r"Cumulative IA Energy_\d+ \(Joules\)", row[0])):
                 dict_results['cumulative_ia'] = float(re.findall(r"\d+\.\d+", row[0])[0])
     return dict_results
+    
+'''
+read time series data from csv file
+'''
+def read_timeseries(column_name, csv_file):
+    df = pd.read_csv(csv_file)
+    df_dropna = df.dropna(axis='rows')
+    data = df_dropna[column_name].values.tolist()
+    return data
 
 '''
 read the files that we generate and return a dictionary
