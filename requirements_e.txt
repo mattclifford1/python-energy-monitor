@@ -1,9 +1,0 @@
-pyJoules
-torch
-torchvision
-torchaudio
-numpy
-tqdm
-scikit-learn
-pandas
-pytest
