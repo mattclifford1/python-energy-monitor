@@ -99,6 +99,7 @@ class monitor:
                     time.sleep(0.1)
                 # save what we need from csv
                 self.data = utils.read_csv(self.csv_file)
+                self.data['cpu utilisation'] = utils.read_timeseries(' CPU Utilization(%)', self.csv_file)
                 # close recording
                 self._kill_proc()
                 # remove csv log
@@ -124,6 +125,7 @@ class monitor:
         # remove background
         self.write_data['cumulative_ia'] -= self.background_watts*self.data['time']
         self.write_data['average_ia'] -= self.background_watts
+        self.write_data['cpu utilisation'] = self.data['cpu utilisation']
         # log
         utils.log_data(self.log_filepath, self.write_data)
 

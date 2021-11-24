@@ -49,7 +49,7 @@ class start_recording:
             self.mean_cpu = sum(self.measurements)/len(self.measurements)
         self.mean_watts = (self.mean_cpu/100)*self.TDP
         self.duration = self.time_taken.total_seconds()
-        self.data = {'timeseries': self.measurements,
+        self.data = {'cpu utilisation': self.measurements,
                      'mean' :self.mean_cpu,
                      'time': self.duration,
                      'average_ia': self.mean_watts,

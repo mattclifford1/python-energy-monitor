@@ -18,7 +18,7 @@ def test_values():
     m = energy_monitor.cpu_percent.start_recording(TDP=15, interval=0.1)
     energy_monitor.utils.dummy_compute(10)
     data = m.stop()
-    assert type(data['timeseries']) == list
+    assert type(data['cpu utilisation']) == list
     assert type(data['mean']) == float
     assert type(data['time']) == float
     assert type(data['average_ia']) == float
@@ -28,10 +28,10 @@ def test_recorded1():
     m = energy_monitor.cpu_percent.start_recording(TDP=15, interval=0.1)
     time.sleep(0.15) # slightly more than interval to make sure recorded
     data = m.stop()
-    assert len(data['timeseries']) == 1
+    assert len(data['cpu utilisation']) == 1
 
 def test_recorded2():
     m = energy_monitor.cpu_percent.start_recording(TDP=15, interval=0.1)
     time.sleep(0.25) # slightly more than interval to make sure recorded
     data = m.stop()
-    assert len(data['timeseries']) == 2
+    assert len(data['cpu utilisation']) == 2
