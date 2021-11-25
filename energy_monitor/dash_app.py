@@ -38,10 +38,15 @@ if __name__ == "__main__":
     # Functions
     @app.callback(
     Output('plot_1', 'figure'),
-    Input('test-names-dropdown', 'value')
+    Input('test-names-dropdown', 'value'),
+    Input('test-modalities-dropdown', 'value')
     )
-    def update_plot1(names):
+    def update_plot1(names, modalities):
+        print(f'MODALITIES: {modalities}')
         df = data[data['name'].isin(names)]
+        if modalities=='Average':
+            df = df.groupby(by=['name'], ).mean().reset_index()
+            print(df) 
         fig = px.bar(df, x='name', y='cumulative_ia', title="Cumulative Energy for selected tests", color='name',
                     labels={'cumulative_ia':'Cumulative Energy [J]', 'name':'Test name'}
         )
@@ -94,9 +99,21 @@ if __name__ == "__main__":
                 html.P(['Choose the tests to compare: ', html.Br()]),
                 dcc.Dropdown(
                         id='test-names-dropdown',
-                        options=name_dropdown[0],   # list of test namesß
+                        options=name_dropdown[0],   # list of test names
                         value=name_test[0],        # default
                         multi=True,
+                        style=dict(
+                                width='60%',
+                            )
+                    ),
+                html.P(['Choose the modality of comparison: ', html.Br()],
+                    style={'margin-top': '15px'}),
+                dcc.Dropdown(
+                        id='test-modalities-dropdown',
+                        options=[{'label': 'Average', 'value': 'Average'},
+                                 {'label': 'Cumulative', 'value': 'Cumulative'}], # list of modalities
+                        value='Average',        # default
+                        multi=False,
                         style=dict(
                                 width='60%',
                             )
