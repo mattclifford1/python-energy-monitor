@@ -115,6 +115,9 @@ class monitor:
         then log data to database
         '''
         self._stop_read_delete()
+        self._log_data()
+
+    def _log_data(self):
         # log monitor data
         self.write_data = {}
         self.write_data['cumulative_ia'] = self.data['cumulative_ia']
@@ -122,6 +125,7 @@ class monitor:
         self.write_data['date'] = utils.get_date_string(self.start_time)
         self.write_data['name'] = self.name
         self.write_data['remove_background_energy'] = str(self.remove_background_energy)
+        self.write_data['IntelPowerGadget'] = str(self.IntelPowerGadget)
         # remove background
         self.write_data['cumulative_ia'] -= self.background_watts*self.data['time']
         self.write_data['average_ia'] -= self.background_watts
