@@ -18,6 +18,8 @@ import ast
 import dash_bootstrap_components as dbc
 import time
 from datetime import datetime
+from plotly.subplots import make_subplots
+import plotly.graph_objects as go
 
 if __name__ == "__main__":
     external_stylesheets = [
@@ -25,7 +27,7 @@ if __name__ == "__main__":
         dbc.themes.MATERIA
     ]
     # Instantiate Dash app
-    app = dash.Dash(external_stylesheets=external_stylesheets)     
+    app = dash.Dash(external_stylesheets=external_stylesheets, suppress_callback_exceptions=True)     
     app.css.config.serve_locally = True
 
     # Get data and features
@@ -80,17 +82,13 @@ if __name__ == "__main__":
         return fig
 
     @app.callback(
-    dash.dependencies.Output('plot_2', 'figure'),
-    [dash.dependencies.Input('year_slider', 'value')])
+    Output('plot_2', 'figure'),
+    Input('year_slider', 'value'))
     def update_plot2(year_range):
         df = data
         min_date = unixToDatetime(year_range[0]).replace(hour=0, minute=0)
         max_date = unixToDatetime(year_range[1]).replace(hour=23, minute=59)
-        print(f'Min: {min_date}')
-        print(f'Max: {max_date}')
-        print(df)
         df = df.loc[(df['date_datetime'] >= min_date) & (df['date_datetime'] <= max_date)]
-        print(df)
         df['date'] = data['date'].apply(lambda x: x[:10])
         fig = px.bar(df, x='date', y='cumulative_ia', title="Cumulative Energy over time", color="name",
                     labels={'cumulative_ia':'Cumulative Energy [J]', 'date':'Date'}
@@ -99,21 +97,59 @@ if __name__ == "__main__":
 
     @app.callback(
     Output('plot_3', 'figure'),
-    Input('unique-names-dropdown', 'value') 
+    Input('unique-names-dropdown', 'value'),
+    Input('unique-names-dropdown2', 'value'),
+    Input('compare-timeseries-radioitem', 'value')
     )
-    def update_plot3(name):
-        df = data[data['name_unique'] == str(name)]
-        timeseries = df['cpu utilisation'].values[0]
-        fig = px.line(x=np.arange(0, len(timeseries)), y=timeseries, title=f"CPU Utilisation for {name}", 
-        labels={'x': 'Time', 'y': 'CPU Utilisation'}, template='plotly')
+    def update_plot3(name1, name2, comparison):
+        if comparison=='No': 
+            df = data[data['name_unique'] == str(name1)]
+            timeseries = df['cpu utilisation'].values[0]
+            fig = px.line(x=np.arange(0, len(timeseries)), y=timeseries, title=f"CPU Utilisation for {name1}", 
+            labels={'x': 'Time', 'y': 'CPU Utilisation'}, template='plotly')
+        else:
+            fig = make_subplots(rows=1, cols=2, subplot_titles=(f"CPU Utilisation for {name1}",  f"CPU Utilisation for {name2}"))
+            df1 = data[data['name_unique'] == str(name1)]
+            df2 = data[data['name_unique'] == str(name2)]
+            timeseries1 = df1['cpu utilisation'].values[0]
+            timeseries2 = df2['cpu utilisation'].values[0]
+
+            fig.add_trace(go.Scatter(x=np.arange(0, len(timeseries1)), y=timeseries1),
+                row=1, col=1
+            )
+            fig.add_trace(go.Scatter(x=np.arange(0, len(timeseries2)), y=timeseries2),
+                row=1, col=2
+            )
+
+            # edit axis labels
+            fig['layout']['xaxis']['title']='Time'
+            fig['layout']['xaxis2']['title']='Time'
+            fig['layout']['yaxis']['title']='CPU Utilisation'
+            fig['layout']['yaxis2']['title']='CPU Utilisation'
         return fig
+
+    @app.callback(
+    Output('show_comparison_query1', 'children'),
+    Input('compare-timeseries-radioitem', 'value'))
+    def show_comparison_query1(radioitem):
+        a = None
+        if radioitem == 'Yes':
+            a = html.P(['Select the second timeseries to compare:'])    
+        return a
+
+    @app.callback(
+    Output('unique-names-dropdown2', 'style'),
+    Input('compare-timeseries-radioitem', 'value'))
+    def show_comparison_query2(radioitem):
+        display_value = 'table' if radioitem == 'Yes' else 'None'
+        return {'width': '60%', 'display' : display_value, '-webkit-appearance': 'menu'}
 
     # Variables for layout
     style_shadow_box = {
-                'border-radius': '5px',
-                'border': '1.5px solid rgba(0,0,0,.125)',
-                'padding': '20px',
-                'margin-top': '15px'}
+        'border-radius': '5px',
+        'border': '1.5px solid rgba(0,0,0,.125)',
+        'padding': '20px',
+        'margin-top': '15px'}
 
     # Dash histogram
     app.layout = html.Div(children=[
@@ -151,7 +187,6 @@ if __name__ == "__main__":
                         style={
                             'display': 'grid'
                         }
-                      
                     )
                 ],
                 style={'margin':'auto'}),               
@@ -202,6 +237,17 @@ if __name__ == "__main__":
                     'display': 'grid'
                 }
             ),html.Br(),
+
+            html.Div(id='show_comparison_query1'),
+            dcc.Dropdown(
+                id='unique-names-dropdown2',
+                options=unique_name_dropdown,   # list of test names
+                value=unique_name_test[0],        # default
+                multi=False,
+                style=dict(
+                    width='60%'
+                )
+            ),
 
             dcc.Graph(id='plot_3',
                 style=dict(
