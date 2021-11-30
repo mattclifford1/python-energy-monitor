@@ -142,7 +142,7 @@ if __name__ == "__main__":
     Input('compare-timeseries-radioitem', 'value'))
     def show_comparison_query2(radioitem):
         display_value = 'table' if radioitem == 'Yes' else 'None'
-        return {'width': '60%', 'display' : display_value, '-webkit-appearance': 'menu'}
+        return {'width': '100%', 'display' : display_value, '-webkit-appearance': 'menu'}
 
     # Variables for layout
     style_shadow_box = {
