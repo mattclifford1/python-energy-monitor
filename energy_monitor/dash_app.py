@@ -70,10 +70,12 @@ if __name__ == "__main__":
     )
     def update_plot1(names, modalities):
         df = data[data['name'].isin(names)]
+        title = 'Cumulative'
         if modalities=='Average':
             df = df.groupby(by=['name'], ).mean().reset_index()
-        fig = px.bar(df, x='name', y='cumulative_ia', title="Cumulative Energy for selected tests", color='name',
-                    labels={'cumulative_ia':'Cumulative Energy [J]', 'name':'Test name'}
+            title = 'Average'
+        fig = px.bar(df, x='name', y='cumulative_ia', title=f"{title} Energy for selected tests", color='name',
+                    labels={'cumulative_ia':f'Energy [J]', 'name':'Test name'}
         )
         return fig
 
@@ -104,7 +106,6 @@ if __name__ == "__main__":
         timeseries = df['cpu utilisation'].values[0]
         fig = px.line(x=np.arange(0, len(timeseries)), y=timeseries, title=f"CPU Utilisation for {name}", 
         labels={'x': 'Time', 'y': 'CPU Utilisation'}, template='plotly')
-
         return fig
 
     # Variables for layout
@@ -142,15 +143,15 @@ if __name__ == "__main__":
                     ),
                 html.P(['Choose the modality of comparison: ', html.Br()],
                     style={'margin-top': '15px'}),
-                dcc.Dropdown(
+                dcc.RadioItems(
                         id='test-modalities-dropdown',
                         options=[{'label': 'Average', 'value': 'Average'},
                                  {'label': 'Cumulative', 'value': 'Cumulative'}], # list of modalities
                         value='Average',        # default
-                        multi=False,
-                        style=dict(
-                                width='60%',
-                            )
+                        style={
+                            'display': 'grid'
+                        }
+                      
                     )
                 ],
                 style={'margin':'auto'}),               
@@ -189,7 +190,19 @@ if __name__ == "__main__":
                 style=dict(
                         width='60%',
                     )
-            ),
+            ),html.Br(),
+            html.P(['Do you want to compare multiple timeseries?: ', html.Br()]),
+
+            dcc.RadioItems(
+                id='compare-timeseries-radioitem',
+                options=[{'label': 'Yes', 'value': 'Yes'},
+                            {'label': 'No', 'value': 'No'}], # list of modalities
+                value='No',        # default
+                style={
+                    'display': 'grid'
+                }
+            ),html.Br(),
+
             dcc.Graph(id='plot_3',
                 style=dict(
                     width='70%'
