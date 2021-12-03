@@ -32,7 +32,10 @@ if __name__ == "__main__":
 
     # Get data and features
     data = pd.read_csv('energy_monitor/data-examples/example.csv')  
-    data['name_unique'] = data['name'] + '_' + data['date']
+    print(data['remove_background_energy'].values)
+    data['remove_background_energy_renamed'] = data['remove_background_energy'].apply(lambda x: 'Idle' if x==True else 'No_Idle')
+    data['name_unique'] = data['name'] + '_' + data['date'] + '_' + data['remove_background_energy_renamed'] 
+    data['name'] = data['name']+ '_' + data['remove_background_energy_renamed']
     data['cpu utilisation'] = data['cpu utilisation'].apply(lambda x: ast.literal_eval(x))
     name_test = np.unique(data['name'].values).tolist()             
     unique_name_test = np.unique(data['name_unique'].values).tolist()  
@@ -105,27 +108,27 @@ if __name__ == "__main__":
         if comparison=='No': 
             df = data[data['name_unique'] == str(name1)]
             timeseries = df['cpu utilisation'].values[0]
-            fig = px.line(x=np.arange(0, len(timeseries)), y=timeseries, title=f"CPU Utilisation for {name1}", 
-            labels={'x': 'Time', 'y': 'CPU Utilisation'}, template='plotly')
+            fig = px.line(x=np.arange(0, len(timeseries))/2, y=timeseries, title=f"CPU Utilisation for {name1}", 
+            labels={'x': 'Time [s]', 'y': 'CPU% [W s]'}, template='plotly')
         else:
-            fig = make_subplots(rows=1, cols=2, subplot_titles=(f"CPU Utilisation for {name1}",  f"CPU Utilisation for {name2}"))
+            fig = make_subplots(rows=1, cols=2, subplot_titles=(f"CPU Utilisation",  f"CPU Utilisation"))
             df1 = data[data['name_unique'] == str(name1)]
             df2 = data[data['name_unique'] == str(name2)]
             timeseries1 = df1['cpu utilisation'].values[0]
             timeseries2 = df2['cpu utilisation'].values[0]
 
-            fig.add_trace(go.Scatter(x=np.arange(0, len(timeseries1)), y=timeseries1),
+            fig.add_trace(go.Scatter(x=np.arange(0, len(timeseries1))/2, y=timeseries1, name='Timeseries 1'),
                 row=1, col=1
             )
-            fig.add_trace(go.Scatter(x=np.arange(0, len(timeseries2)), y=timeseries2),
+            fig.add_trace(go.Scatter(x=np.arange(0, len(timeseries2))/2, y=timeseries2, name='Timeseries 2'),
                 row=1, col=2
             )
 
             # edit axis labels
-            fig['layout']['xaxis']['title']='Time'
-            fig['layout']['xaxis2']['title']='Time'
-            fig['layout']['yaxis']['title']='CPU Utilisation'
-            fig['layout']['yaxis2']['title']='CPU Utilisation'
+            fig['layout']['xaxis']['title']='Time [s]'
+            fig['layout']['xaxis2']['title']='Time [s]'
+            fig['layout']['yaxis']['title']='CPU% [W s]'
+            fig['layout']['yaxis2']['title']='CPU% [W s]'
         return fig
 
     @app.callback(
@@ -249,11 +252,8 @@ if __name__ == "__main__":
                 )
             ),
 
-            dcc.Graph(id='plot_3',
-                style=dict(
-                    width='70%'
-                    )
-            )],
+            dcc.Graph(id='plot_3')
+            ],
             style=style_shadow_box
             )
     ], style={'margin': '30px'})
