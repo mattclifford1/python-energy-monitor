@@ -20,25 +20,27 @@ import time
 from datetime import datetime
 from plotly.subplots import make_subplots
 import plotly.graph_objects as go
+import webbrowser
 
-if __name__ == "__main__":
+
+def run(csv_file='energy_monitor/data-examples/example.csv'):
     external_stylesheets = [
         "https://fonts.googleapis.com/css2?family=Nunito&display=swap",
         dbc.themes.MATERIA
     ]
     # Instantiate Dash app
-    app = dash.Dash(external_stylesheets=external_stylesheets, suppress_callback_exceptions=True)     
+    app = dash.Dash(external_stylesheets=external_stylesheets, suppress_callback_exceptions=True)
     app.css.config.serve_locally = True
 
     # Get data and features
-    data = pd.read_csv('energy_monitor/data-examples/example.csv')  
+    data = pd.read_csv(csv_file)
     print(data['remove_background_energy'].values)
     data['remove_background_energy_renamed'] = data['remove_background_energy'].apply(lambda x: 'Idle' if x==True else 'No_Idle')
-    data['name_unique'] = data['name'] + '_' + data['date'] + '_' + data['remove_background_energy_renamed'] 
+    data['name_unique'] = data['name'] + '_' + data['date'] + '_' + data['remove_background_energy_renamed']
     data['name'] = data['name']+ '_' + data['remove_background_energy_renamed']
     data['cpu utilisation'] = data['cpu utilisation'].apply(lambda x: ast.literal_eval(x))
-    name_test = np.unique(data['name'].values).tolist()             
-    unique_name_test = np.unique(data['name_unique'].values).tolist()  
+    name_test = np.unique(data['name'].values).tolist()
+    unique_name_test = np.unique(data['name_unique'].values).tolist()
     name_dropdown = [{'label' : name, 'value': name} for name in name_test]
     unique_name_dropdown = [{'label' : name, 'value': name} for name in unique_name_test]
     dates_str = data['date'].values
@@ -55,7 +57,7 @@ if __name__ == "__main__":
         return pd.to_datetime(unix,unit='s')
 
     def getMarks(start, end, Nth=10):
-        ''' Returns the marks for labeling. 
+        ''' Returns the marks for labeling.
             Every Nth value will be used.
         '''
         result = {}
@@ -66,7 +68,7 @@ if __name__ == "__main__":
                 # Append value to dict
                 result[unixTimeMillis(date)] = str(date.strftime('%Y-%m-%d'))
         return result
-    
+
     # Functions
     @app.callback(
     Output('plot_1', 'figure'),
@@ -105,10 +107,10 @@ if __name__ == "__main__":
     Input('compare-timeseries-radioitem', 'value')
     )
     def update_plot3(name1, name2, comparison):
-        if comparison=='No': 
+        if comparison=='No':
             df = data[data['name_unique'] == str(name1)]
             timeseries = df['cpu utilisation'].values[0]
-            fig = px.line(x=np.arange(0, len(timeseries))/2, y=timeseries, title=f"CPU Utilisation for {name1}", 
+            fig = px.line(x=np.arange(0, len(timeseries))/2, y=timeseries, title=f"CPU Utilisation for {name1}",
             labels={'x': 'Time [s]', 'y': 'CPU% [W s]'}, template='plotly')
         else:
             fig = make_subplots(rows=1, cols=2, subplot_titles=(f"CPU Utilisation",  f"CPU Utilisation"))
@@ -137,7 +139,7 @@ if __name__ == "__main__":
     def show_comparison_query1(radioitem):
         a = None
         if radioitem == 'Yes':
-            a = html.P(['Select the second timeseries to compare:'])    
+            a = html.P(['Select the second timeseries to compare:'])
         return a
 
     @app.callback(
@@ -164,7 +166,7 @@ if __name__ == "__main__":
         html.Div([
             html.Span([
                 html.Img(src='https://freerangestock.com/sample/38788/vector-lightbulb-ideas.jpg', height='80px'),
-                f"Your total energy consumption is {int(np.floor(data['cumulative_ia'].sum()))} J"],             
+                f"Your total energy consumption is {int(np.floor(data['cumulative_ia'].sum()))} J"],
                 )
         ], style=style_shadow_box),
 
@@ -192,12 +194,12 @@ if __name__ == "__main__":
                         }
                     )
                 ],
-                style={'margin':'auto'}),               
-            dcc.Graph(id='plot_1')                
+                style={'margin':'auto'}),
+            dcc.Graph(id='plot_1')
             ],
             style=style_shadow_box),
 
-        html.Div([    
+        html.Div([
             html.Div(
             [
                 html.P(['Select the timeframe: ', html.Br()]),
@@ -213,12 +215,12 @@ if __name__ == "__main__":
                     ],
                 style={'margin-top': '20',
                        'width': '50%'}
-            ), 
+            ),
 
             dcc.Graph(id='plot_2')],
             style=style_shadow_box
             ),
-        html.Div([   
+        html.Div([
             html.P(['Choose the timeseries to visualise: ', html.Br()]),
             dcc.Dropdown(
                 id='unique-names-dropdown',
@@ -257,5 +259,9 @@ if __name__ == "__main__":
             style=style_shadow_box
             )
     ], style={'margin': '30px'})
-    
-    app.run_server(debug=True)   
+
+    webbrowser.open('http://127.0.0.1:8050/')
+    app.run_server(debug=True)
+
+if __name__ == '__main__':
+    run()
