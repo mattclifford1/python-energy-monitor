@@ -1,4 +1,4 @@
-#! python
+#!/usr/bin/env python
 
 import sys
 from energy_monitor import dash_app
