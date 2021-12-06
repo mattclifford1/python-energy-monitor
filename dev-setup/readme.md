@@ -26,8 +26,21 @@ Use the install script to set up automatically:
 
 3. Install dependancies with pip:
 
-`$ pip install -r requirements.txt -f https://download.pytorch.org/whl/cpu/torch_stable.html`
+`$ pip install -r requirements-dev.txt -f https://download.pytorch.org/whl/cpu/torch_stable.html`
 
 4. Install current dir in editable mode:
 
 `$ pip install -e .`
+
+# Updating PyPi
+First clean the repo of _pycache
+
+`$ git clean -xfd`
+
+Build the package wheel
+
+`$ python setup.py sdist bdist_wheel`
+
+Upload via twine
+
+`$ twine upload dist/*`.
