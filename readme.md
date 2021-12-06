@@ -38,9 +38,8 @@ Args:
 Results are displayed in an interactive dash web browser application. To run dash use
 
 `
-$ python energy_monitor --dash *** update this
+$ python energy_monitor/dash_app.py
 `
-** short description how to interact with dash
 
 
 # How to Contribute
