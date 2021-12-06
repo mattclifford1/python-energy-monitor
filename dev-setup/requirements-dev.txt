@@ -11,3 +11,4 @@ dash==2.0.0
 plotly==5.3.1
 psutil
 dash-bootstrap-components
+twine
