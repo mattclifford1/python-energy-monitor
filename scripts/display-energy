@@ -1,0 +1,9 @@
+#! python
+
+import sys
+from energy_monitor import dash_app
+
+if len(sys.argv) > 1:
+    dash_app.run(sys.argv[1])
+else:
+    dash_app.run()
