@@ -7,7 +7,7 @@ import energy_monitor
 # TODO: make more like https://github.com/fat-forensics/fat-forensics/blob/master/setup.py
 
 setup(name='energy_monitor',
-      version='0.7',
+      version='0.7.1',
       packages=find_packages(),
       install_requires=['numpy', 'tqdm', 'pandas', 'dash', 'plotly', 'psutil', 'dash-bootstrap-components'],
       author="Matt Clifford",
