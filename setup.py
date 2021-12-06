@@ -9,7 +9,7 @@ import energy_monitor
 setup(name='energy_monitor',
       version='0.3',
       packages=find_packages(),
-      install_requires=['numpy', 'tqdm', 'pandas'],
+      install_requires=['numpy', 'tqdm', 'pandas', 'dash', 'plotly', 'psutil'],
       author="Matt Clifford",
       author_email="matt.clifford@bristol.ac.uk",
       description="CPU energy monitoring and displaying'",)

@@ -3,37 +3,49 @@
 # Energy Monitor Python Package
 [energy_monitor](./energy_monitor) is a python package that automatically records, logs and visualises the energy comsuption of developing and testing python programs.
 
-# Adding dependancies
-Put any package required dependancies in [requirements.txt](./requirements.txt) and also put them in [.circleci/requirements-test.txt](.circleci/requirements-test.txt) if they are required for testing using CI.
+# How to Use
+## Installation
+To get the latest stable version of the package, use the [PyPi download](https://pypi.org/project/energy-monitor):
 
-# Adding tests
-Put any tests to be run on CI in the folder [energy_monitor/tests/misc](energy_monitor/tests/misc). Make sure to write tests for **ALL** new functionality.
+`
+$ pip install energy-monitor
+`
 
-# Python Setup
-Use either the automatic or manual setup process as described below
+To get the newest beta version, download via github
 
-### Automatic Setup (Linux)
-Use the install script to set up automatically:
-`$ ./install.sh`
+`
+$ pip install git+https://github.com/iaitp/2021-A.git
+`
 
-### Manual Setup
+## Logging CPU usage to database
 
-1. Create conda venv:
+```
+import energy_monitor
 
-`$ conda create --name energy_monitor python=3.8`
+monitor = energy_monitor.monitor()
+monitor.start()
+# call code to monitor here
+monitor.stop()
+```
+### energy_monitor::monitor
+Args:
+ - name (str): Human readable name to group the logging as
+ - remove_background_energy (bool): whether to estimate and remove background energy usage from results. Default: False
+ - log_filepath (str): Filepath to database to log results. Default: '~/Documents/energy_monitor.csv'
+ - TDP (int): CPU wattage used to estimate power when IntelPowerGadget is unavailable. Default: 15
 
-2. Activate venv:
+## Viewing results
+Results are displayed in an interactive dash web browser application. To run dash use
 
-`$ conda activate energy_monitor`
+`
+$ python energy_monitor --dash *** update this
+`
+** short description how to interact with dash
 
-3. Install dependancies with pip:
 
-`$ pip install -r requirements.txt -f https://download.pytorch.org/whl/cpu/torch_stable.html`
-
-4. Install current dir in editable mode:
-
-`$ pip install -e .`
+# How to Contribute
+Follow the dev install and practices outlined in [dev-setup](./dev-setup).
 
 # External Dependancies
 
-We use [IntelPowerGadget](https://www.intel.com/content/www/us/en/developer/articles/tool/power-gadget.html) to monitor energy usage on Windows/MacOS. 
+We use [IntelPowerGadget](https://www.intel.com/content/www/us/en/developer/articles/tool/power-gadget.html) to monitor energy usage on Windows/MacOS.
