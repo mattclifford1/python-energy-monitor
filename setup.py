@@ -12,4 +12,5 @@ setup(name='energy_monitor',
       install_requires=['numpy', 'tqdm', 'pandas', 'dash', 'plotly', 'psutil', 'dash-bootstrap-components'],
       author="Matt Clifford",
       author_email="matt.clifford@bristol.ac.uk",
-      description="CPU energy monitoring and displaying'",)
+      description="CPU energy monitoring and displaying'",
+      scripts=['scripts/display-energy'])
