@@ -23,7 +23,8 @@ import plotly.graph_objects as go
 import webbrowser
 
 
-def run(csv_file=os.path.join(os.path.dirname(os.path.realpath(__file__)), 'data-examples/example.csv')):
+def run(csv_file='data-examples/example.csv'):
+    print(csv_file)
     external_stylesheets = [
         "https://fonts.googleapis.com/css2?family=Nunito&display=swap",
         dbc.themes.MATERIA
