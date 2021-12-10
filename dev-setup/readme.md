@@ -32,6 +32,9 @@ Use the [install script](https://github.com/iaitp/2021-A/blob/main/dev-setup/ins
 
 `$ pip install -e .`
 
+### Without Conda
+Ofcourse you can also use a standard system python install with venv, then install the requirements with pip as outlined above.
+
 # Updating PyPi
 ### Automatically (Recommended)
 Use the [script](https://github.com/iaitp/2021-A/blob/main/scripts/push-to-pypi.sh).
