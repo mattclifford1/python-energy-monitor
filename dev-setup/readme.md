@@ -33,13 +33,15 @@ Use the install script to set up automatically:
 `$ pip install -e .`
 
 # Updating PyPi
-Use the automatic [script](https://github.com/iaitp/2021-A/blob/main/scripts/push-to-pypi.sh).
+### Automatically (Recommended)
+Use the [script](https://github.com/iaitp/2021-A/blob/main/scripts/push-to-pypi.sh).
 
 `
 $ scripts/push-to-pypi.sh
 `
 
-Or manually by first cleaning the repo of _pycache and other unstaged/untracked files by git
+### Manually (Windows)
+First clean the repo of _pycache and other unstaged/untracked files by git
 
 `$ git clean -xfd`
 
