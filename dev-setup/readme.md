@@ -33,14 +33,16 @@ Use the install script to set up automatically:
 `$ pip install -e .`
 
 # Updating PyPi
-First clean the repo of _pycache
+Use the automatic [script](https://github.com/iaitp/2021-A/blob/main/scripts/push-to-pypi.sh).
+
+Or manually by first cleaning the repo of _pycache and other unstaged/untracked files by git
 
 `$ git clean -xfd`
 
-Build the package wheel
+Then build the package wheel
 
 `$ python setup.py sdist bdist_wheel`
 
-Upload via twine
+And finally, upload to PyPi via twine
 
 `$ twine upload dist/*`.
