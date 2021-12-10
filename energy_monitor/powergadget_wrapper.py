@@ -15,10 +15,11 @@ from energy_monitor import utils, cpu_percent
 class monitor:
     '''
     monitor energy using IntelPowerGadget
-    args:
-        - name (str):
-        - non_standard_binary_path: use if IntelPowerGadget is installed in a non stand location
-        - log_filepath: where to log energy data to (default is inside user's Documents)
+    Args:
+        - name (str): Human readable name to group the logging as
+        - remove_background_energy (bool): whether to estimate and remove background energy usage from results. Default: False
+        - log_filepath (str): Filepath to database to log results. Default: '~/Documents/energy_monitor.csv'
+        - TDP (int): CPU wattage used to estimate power when IntelPowerGadget is unavailable. Default: 15
     '''
     def __init__(self, name='Monitor Test',
                        non_standard_binary_path=False,
