@@ -10,11 +10,11 @@ Put any tests to be run on CI in the folder [energy_monitor/tests/](energy_monit
 # Python Setup
 Use either the automatic or manual setup process as described below
 
-### Automatic Setup (Linux)
-Use the install script to set up automatically:
+### Automatic Setup (Recommended)
+Use the [install script](https://github.com/iaitp/2021-A/blob/main/dev-setup/install.sh) to set up automatically:
 `$ ./install.sh`
 
-### Manual Setup
+### Manual Setup (Windows)
 
 1. Create conda venv:
 
