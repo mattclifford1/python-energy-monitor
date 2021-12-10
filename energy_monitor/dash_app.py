@@ -1,10 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Spyder Editor
-
-This is a temporary script file.
-"""
-
 import dash
 from dash import dcc
 from dash import html
@@ -22,7 +15,12 @@ from plotly.subplots import make_subplots
 import plotly.graph_objects as go
 import webbrowser
 
+'''
+Launch the dashboard to display results from the database
 
+Args:
+  - csv_file (str): file location of database. Default: '~/Documents/energy_monitor.csv'
+'''
 def run(csv_file='data-examples/example.csv'):
     print(csv_file)
     external_stylesheets = [
