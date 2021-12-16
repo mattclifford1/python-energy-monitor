@@ -6,16 +6,10 @@
 
 # How to Use
 ## Installation
-(Recommended) Get the latest stable version of the package, use the [PyPi download](https://pypi.org/project/energy-monitor):
+Get the latest stable version of the package, use the [PyPi download](https://pypi.org/project/energy-monitor):
 
 `
 $ pip install energy-monitor
-`
-
-To get the newest beta version (unstable), download via github
-
-`
-$ pip install git+https://github.com/iaitp/2021-A.git
 `
 
 ## Logging CPU usage to database
