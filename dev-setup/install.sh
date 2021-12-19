@@ -15,4 +15,4 @@ pip install --upgrade pip
 pip install -r requirements-dev.txt -f https://download.pytorch.org/whl/cpu/torch_stable.html
 
 # install current dir in editable mode
-pip install -e .
+pip install -e ..
