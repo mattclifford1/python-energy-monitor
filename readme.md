@@ -57,3 +57,6 @@ Follow the dev install and practices outlined in [dev-setup](./dev-setup).
 # External Dependancies
 
 We use [IntelPowerGadget](https://www.intel.com/content/www/us/en/developer/articles/tool/power-gadget.html) to monitor energy usage on Windows.
+
+# Reading
+[Survey of energy estimation algorithms for ML](https://link.springer.com/chapter/10.1007/978-3-030-13453-2_20)
